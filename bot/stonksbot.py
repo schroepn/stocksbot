@@ -5,7 +5,7 @@ import numpy as np
 from yahoo_fin import stock_info as si
 from dotenv import load_dotenv
 import os
-import json
+from yahoo_finance_async import OHLC, Interval, History
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -23,20 +23,12 @@ async def on_message(message):
 
     if message.content.startswith('$stonks'):
         while True:
-            try:
-                await message.channel.send('Getting stonks, this may take some time...')
-                ticker = message.content.split('$stonks ',1)[1]
-                print(ticker)
-                stonk = yf.Ticker(ticker)
-                # get stock info
-                df = stonk.history(period="1d")
-                print(df.index)
-                price = str(si.get_live_price(ticker))
-                await message.channel.send('TODAYS DATA FOR ' + ticker.upper() + '\nCurrent Stock Price: ' + price + '\nToday\'s High: ' + np.array2string(df.iat[1,3]) + '\nToday\'s Low: ' + np.array2string(df.iat[1,2]))
-                break
-            except Exception:
-                await message.channel.send('oopsie woopsie, we fucky wuckied! either twy again or dewete bot OwO')
-                break
+            
+            await message.channel.send('Getting stonks, this may take some time...')
+            result = await OHLC.fetch('gme',interval=Interval.HOUR,history=History.DAY)
+            price = str(si.get_live_price('gme'))
+            await message.channel.send('TODAYS DATA FOR GME\nCurrent Stock Price: ' + price + '\nToday\'s High: ' + str(result['candles'][0]['high']) + '\nToday\'s Low: ' + str(result['candles'][0]['low']))
+            break
         
 
 client.run(TOKEN)

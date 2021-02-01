@@ -1,7 +1,6 @@
 import discord
 import pandas as pd
 import numpy as np
-from yahoo_fin import stock_info as si
 from dotenv import load_dotenv
 import os
 from yahoo_finance_async import OHLC, Interval, History
@@ -25,7 +24,7 @@ async def on_message(message):
             ticker = message.content.split('$stonks ',1)[1]
             await message.channel.send('Getting stonks, this may take some time...')
             result = await OHLC.fetch(ticker,interval=Interval.HOUR,history=History.DAY)
-            price = str(si.get_live_price(ticker))
+            price = str(result['meta']['regularMarketPrice'])
             await message.channel.send('TODAYS DATA FOR ' + ticker.upper() + '\nCurrent Stock Price: ' + price + '\nToday\'s High: ' + str(result['candles'][0]['high']) + '\nToday\'s Low: ' + str(result['candles'][0]['low']))
             break
         

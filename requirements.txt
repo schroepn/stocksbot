@@ -1,1 +1,7 @@
 discord.py
+yfinance.py
+pandas.py
+numpy.py
+yahoo-fin.py
+dotenv.py
+os.py

@@ -1,4 +1,3 @@
-import yfinance as yf
 import discord
 import pandas as pd
 import numpy as np

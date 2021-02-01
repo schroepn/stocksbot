@@ -1,6 +1,6 @@
 discord.py
-yfinance
 pandas
 numpy
 python-dotenv
 yahoo-finance-async
+yahoo-fin

@@ -5,6 +5,7 @@ import numpy as np
 from yahoo_fin import stock_info as si
 from dotenv import load_dotenv
 import os
+import json
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')

@@ -22,11 +22,11 @@ async def on_message(message):
 
     if message.content.startswith('$stonks'):
         while True:
-            
+            ticker = message.content.split('$stonks ',1)[1]
             await message.channel.send('Getting stonks, this may take some time...')
-            result = await OHLC.fetch('gme',interval=Interval.HOUR,history=History.DAY)
-            price = str(si.get_live_price('gme'))
-            await message.channel.send('TODAYS DATA FOR GME\nCurrent Stock Price: ' + price + '\nToday\'s High: ' + str(result['candles'][0]['high']) + '\nToday\'s Low: ' + str(result['candles'][0]['low']))
+            result = await OHLC.fetch(ticker,interval=Interval.HOUR,history=History.DAY)
+            price = str(si.get_live_price(ticker))
+            await message.channel.send('TODAYS DATA FOR ' + ticker.upper() + '\nCurrent Stock Price: ' + price + '\nToday\'s High: ' + str(result['candles'][0]['high']) + '\nToday\'s Low: ' + str(result['candles'][0]['low']))
             break
         
 

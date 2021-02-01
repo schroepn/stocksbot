@@ -2,7 +2,6 @@ import yfinance as yf
 import discord
 import pandas as pd
 import numpy as np
-import json
 from yahoo_fin import stock_info as si
 from dotenv import load_dotenv
 import os
@@ -32,7 +31,7 @@ async def on_message(message):
                 df = stonk.history(period="1d")
                 print(df.index)
                 price = str(si.get_live_price(ticker))
-                await message.channel.send('TODAYS DATA FOR ' + ticker.upper() + '\nCurrent Stock Price: ' + price + '\nToday\'s High: ' + np.array2string(df.iat[1,2]) + '\nToday\'s Low: ' + np.array2string(df.iat[1,3]))
+                await message.channel.send('TODAYS DATA FOR ' + ticker.upper() + '\nCurrent Stock Price: ' + price + '\nToday\'s High: ' + np.array2string(df.iat[1,3]) + '\nToday\'s Low: ' + np.array2string(df.iat[1,2]))
                 break
             except Exception:
                 await message.channel.send('oopsie woopsie, we fucky wuckied! either twy again or dewete bot OwO')

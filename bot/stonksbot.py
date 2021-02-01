@@ -29,7 +29,7 @@ async def on_message(message):
         result = await OHLC.fetch(ticker,interval=Interval.FIFTEEN_MINUTE,history=History.DAY)
         print('got the ticker data')
         #gets the current price for a share
-        price = str(result['meta']['regularMarketPrice'])
+        price = result['meta']['regularMarketPrice']
         print('got the price at: ' + str(price))
         #formats the message
         toSend = 'Today\'s Data for {stock}\nCurrent Stock Price: {pps:.3f}\nToday\'s High: {high:.3f}\nToday\'s Low: {low:.3f}'

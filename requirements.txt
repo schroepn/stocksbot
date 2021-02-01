@@ -5,3 +5,4 @@ python-dotenv
 yahoo-finance-async
 yahoo-fin
 requests
+requests-html

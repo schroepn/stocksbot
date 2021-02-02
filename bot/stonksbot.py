@@ -32,11 +32,11 @@ async def on_message(message):
         #gets the current price for a share
         price = dayprice['meta']['regularMarketPrice']
         print('got the price at: ' + str(price))
+        print('day price is: ' + str(result['meta']['regularMarketPrice']))
         #formats the message
         toSend = 'Today\'s Data for {stock}\nCurrent Stock Price: {pps:.3f}\nToday\'s High: {high:.3f}\nToday\'s Low: {low:.3f}'
         #sends the message to discord
         await message.channel.send(toSend.format(stock=ticker,pps=price,high=result['candles'][0]['high'],low=result['candles'][0]['low']))
-        print(result)
         
         
 

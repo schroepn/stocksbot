@@ -26,7 +26,7 @@ async def on_message(message):
         #sends message saying it will take time so peopel don't get angery
         await message.channel.send('Getting stonks, this may take some time...')
         #gets the ticker data using yahoo_finance_async, data is every 15 minutes for the past day
-        result = await OHLC.fetch(ticker,interval=Interval.FIFTEEN_MINUTE,history=History.DAY)
+        result = await OHLC.fetch(ticker,interval=Interval.MINUTE,history=History.DAY)
         print('got the ticker data')
         #gets the current price for a share
         price = result['meta']['regularMarketPrice']

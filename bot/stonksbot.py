@@ -24,23 +24,25 @@ async def on_message(message):
         
             #gets the ticker from the input
             ticker = message.content.split('$stonks ',1)[1]
-            #sends message saying it will take time so peopel don't get angery
-            sentMessage = await message.channel.send('Getting stonks, this may take some time.')
+            #sends message saying it will take time so peopel don't get angery, also to tell user that bot has been called
+            noticeEmbed = discord.Embed(title='Getting Stonks', description='this may take some time')
+            sentMessage = await message.channel.send(embed=noticeEmbed)
             #gets the ticker data using yahoo_finance_async, data is every 15 minutes for the past day
             result = await OHLC.fetch(ticker,interval=Interval.DAY,history=History.DAY)
             print('got the ticker data')
-            await sentMessage.edit(content='Getting stonks, this may take some time..')
             #gets the current price for a share
             price = result['meta']['regularMarketPrice']
             print('got the price at: ' + str(price))
             print('day price is: ' + str(result['meta']['regularMarketPrice']))
-            await sentMessage.edit(content='Getting stonks, this may take some time...')
-            #formats the message
-            toSend = 'Today\'s Data for {stock}\nCurrent Stock Price: {pps:.3f}\nToday\'s High: {high:.3f}\nToday\'s Low: {low:.3f}'
+            #formats the message into an embed
+            stonkInfoEmbed = discord.Embed(title='Today\'s Data for {stock}'.format(stock=ticker))
+            stonkInfoEmbed.add_field(name='Current Price:',description='{pps:.3f}'.format(pps=price))
+            stonkInfoEmbed.add_field(name='Today\'s High:',description='{high:.3f}'.format(high=result['candles'][0]['high']))
+            stonkInfoEmbed.add_field(name='Today\'s Low:',description='{low:.3f}'.format(low=result['candles'][0]['low']))
             #sends the message to discord
-            await sentMessage.edit(content=toSend.format(stock=ticker,pps=price,high=result['candles'][0]['high'],low=result['candles'][0]['low']))
+            await sentMessage.edit(embed=stonkInfoEmbed)
         except api.APIError:
-            await message.channel.send('That Stonk Doesn\'t Exist You Dummy')
+            await message.channel.send('ERROR: NSS (NO SUCH STOCK)')
         
         
 

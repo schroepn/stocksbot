@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from dotenv import load_dotenv
 import os
-from yahoo_finance_async import OHLC, Interval, History
+from yahoo_finance_async import OHLC, Interval, History, api
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -37,7 +37,7 @@ async def on_message(message):
             toSend = 'Today\'s Data for {stock}\nCurrent Stock Price: {pps:.3f}\nToday\'s High: {high:.3f}\nToday\'s Low: {low:.3f}'
             #sends the message to discord
             await message.channel.send(toSend.format(stock=ticker,pps=price,high=result['candles'][0]['high'],low=result['candles'][0]['low']))
-        except yahoo_finance_async.api.APIError:
+        except api.APIError:
             await message.channel.send('That Stonk Doesn\'t Exist You Dummy')
         
         

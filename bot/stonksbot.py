@@ -36,9 +36,9 @@ async def on_message(message):
             print('day price is: ' + str(result['meta']['regularMarketPrice']))
             #formats the message into an embed
             stonkInfoEmbed = discord.Embed(title='Today\'s Data for {stock}'.format(stock=ticker))
-            stonkInfoEmbed.add_field(name='Current Price:',description='{pps:.3f}'.format(pps=price))
-            stonkInfoEmbed.add_field(name='Today\'s High:',description='{high:.3f}'.format(high=result['candles'][0]['high']))
-            stonkInfoEmbed.add_field(name='Today\'s Low:',description='{low:.3f}'.format(low=result['candles'][0]['low']))
+            stonkInfoEmbed.add_field(name='Current Price:',value='{pps:.3f}'.format(pps=price))
+            stonkInfoEmbed.add_field(name='Today\'s High:',value='{high:.3f}'.format(high=result['candles'][0]['high']))
+            stonkInfoEmbed.add_field(name='Today\'s Low:',value='{low:.3f}'.format(low=result['candles'][0]['low']))
             #sends the message to discord
             await sentMessage.edit(embed=stonkInfoEmbed)
         except api.APIError:

@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 from yahoo_finance_async import OHLC, Interval, History, api
 
-tokenFile = open('token.txt')
+tokenFile = open('token.txt', 'r')
 TOKEN = tokenFile.read()
 #load_dotenv()
 #TOKEN = os.getenv('DISCORD_TOKEN')

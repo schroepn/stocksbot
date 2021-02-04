@@ -58,8 +58,8 @@ async def on_message(message):
         
         
 
-def cleanup():
-    print "cleanup"
+async def cleanup():
+    print ('committing seppuku')
     await message.channel.send('I am dead now, goodbye')
     Client.logout()
     quit()

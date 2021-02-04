@@ -6,6 +6,11 @@ import os
 from yahoo_finance_async import OHLC, Interval, History, api
 import atexit
 
+print(os.getcwd())
+print(os.listdir())
+os.chdir('./bot')
+print(os.getcwd())
+print(os.listdir())
 tokenFile = open('token.txt', 'r')
 TOKEN = tokenFile.read()
 #load_dotenv()

@@ -4,6 +4,7 @@ import numpy as np
 from dotenv import load_dotenv
 import os
 from yahoo_finance_async import OHLC, Interval, History, api
+import atexit
 
 tokenFile = open('token.txt', 'r')
 TOKEN = tokenFile.read()
@@ -22,6 +23,7 @@ async def on_message(message):
         return
     if message.content.startswith('$kill') and message.author.id==200802901944303616:
         await message.channel.send('I am dead now, goodbye')
+        Client.logout()
         quit()
 
     if message.content.startswith('$stonks'):
@@ -50,5 +52,14 @@ async def on_message(message):
             await message.channel.send('ERROR: NSS (NO SUCH STOCK)')
         
         
+
+def cleanup():
+    print "cleanup"
+    await message.channel.send('I am dead now, goodbye')
+    Client.logout()
+    quit()
+
+atexit.register(cleanup)
+
 
 client.run(TOKEN)

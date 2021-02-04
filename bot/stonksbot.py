@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 from yahoo_finance_async import OHLC, Interval, History, api
 
-tokenFile = open('../../.gitignore/token.txt')
+tokenFile = open('token.txt')
 TOKEN = tokenFile.read()
 #load_dotenv()
 #TOKEN = os.getenv('DISCORD_TOKEN')
@@ -20,8 +20,9 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-    if message.content.startswith('$kill') && message.author.id=='200802901944303616':
-        os._exit(1)
+    if message.content.startswith('$kill') and message.author.id==200802901944303616:
+        await message.channel.send('I am dead now, goodbye')
+        quit()
 
     if message.content.startswith('$stonks'):
         try:

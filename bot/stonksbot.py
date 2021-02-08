@@ -24,7 +24,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.author == client.user or message.author == bot.user:
+    if message.author == client.user or message.author.bot:
         return
     elif message.content.startswith('$kill') and message.author.id==200802901944303616:
         await message.channel.send('I am dead now, goodbye')

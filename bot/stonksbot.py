@@ -24,14 +24,14 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.author == client.user:
+    if message.author == client.user or message.author == bot.user:
         return
-    if message.content.startswith('$kill') and message.author.id==200802901944303616:
+    elif message.content.startswith('$kill') and message.author.id==200802901944303616:
         await message.channel.send('I am dead now, goodbye')
         Client.logout()
         quit()
 
-    if message.content.startswith('$stonks'):
+    elif message.content.startswith('$stonks'):
         try:
         
             #gets the ticker from the input
@@ -56,7 +56,8 @@ async def on_message(message):
         except api.APIError:
             await message.channel.send('ERROR: NSS (NO SUCH STOCK)')
         
-        
+    elif message.content.startswith('$sar'):
+        await message.channel.send('Sarukei Is Not Cool')   
 
 async def cleanup():
     print ('committing seppuku')

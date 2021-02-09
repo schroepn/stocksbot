@@ -16,56 +16,62 @@ TOKEN = tokenFile.read()
 #load_dotenv()
 #TOKEN = os.getenv('DISCORD_TOKEN')
 
+bot = commands.Bot(command_prefix='$')
+
 client = discord.Client()
 
-@client.event
-async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
 
-@client.event
-async def on_message(message):
-    if message.author == client.user or message.author.bot:
+@bot.event
+async def on_ready():
+    print('Beep Boop Bot Is On...'.format(client))
+
+@bot.command()
+async def stonks(ctx, ticker):
+    if ctx.author.bot:
         return
-    elif message.content.startswith('$kill') and message.author.id==200802901944303616:
-        await message.channel.send('I am dead now, goodbye')
-        Client.logout()
+    #sends message saying it will take time so peopel don't get angery, also to tell user that bot has been called
+    noticeEmbed = discord.Embed(title='Getting Stonks', description='this may take some time')
+    sentMessage = await ctx.send(embed=noticeEmbed)
+    try:
+        #gets the ticker data using yahoo_finance_async, data is the overview of the last trading day
+        result = await OHLC.fetch(ticker,interval=Interval.DAY,history=History.DAY)
+        
+        #gets the current price for a share
+        price = result['meta']['regularMarketPrice']
+        
+        #formats the message into an embed
+        stonkInfoEmbed = discord.Embed(title='Today\'s Data for {stock}'.format(stock=ticker),color=0xf812ec)
+        stonkInfoEmbed.add_field(name='Current Price:',value='{pps:.3f}'.format(pps=price),inline=False)
+        stonkInfoEmbed.add_field(name='Today\'s High:',value='{high:.3f}'.format(high=result['candles'][0]['high']),inline=False)
+        stonkInfoEmbed.add_field(name='Today\'s Low:',value='{low:.3f}'.format(low=result['candles'][0]['low']),inline=False)
+        
+        #sends the message to discord
+        await sentMessage.edit(embed=stonkInfoEmbed)
+    except api.APIError:
+        errorEmbed = discord.Embed(title='ERROR: NSS',description='NO SUCH STOCK',color=0xf812ec)
+        await sentMessage.edit(embed=errorEmbed)
+
+@bot.command()
+async def sar(ctx):
+    if ctx.author.bot:
+        return
+    await ctx.send('Sarukei Is Not Cool')
+
+
+@bot.command()
+async def kill(ctx):
+    if ctx.author.id == 200802901944303616:
+        await ctx.send('I am kill')
+        await cleanup()
         quit()
 
-    elif message.content.startswith('$stonks'):
-        try:
-        
-            #gets the ticker from the input
-            ticker = message.content.split('$stonks ',1)[1]
-            #sends message saying it will take time so peopel don't get angery, also to tell user that bot has been called
-            noticeEmbed = discord.Embed(title='Getting Stonks', description='this may take some time')
-            sentMessage = await message.channel.send(embed=noticeEmbed)
-            #gets the ticker data using yahoo_finance_async, data is every 15 minutes for the past day
-            result = await OHLC.fetch(ticker,interval=Interval.DAY,history=History.DAY)
-            print('got the ticker data')
-            #gets the current price for a share
-            price = result['meta']['regularMarketPrice']
-            print('got the price at: ' + str(price))
-            print('day price is: ' + str(result['meta']['regularMarketPrice']))
-            #formats the message into an embed
-            stonkInfoEmbed = discord.Embed(title='Today\'s Data for {stock}'.format(stock=ticker),color=0xf812ec)
-            stonkInfoEmbed.add_field(name='Current Price:',value='{pps:.3f}'.format(pps=price),inline=False)
-            stonkInfoEmbed.add_field(name='Today\'s High:',value='{high:.3f}'.format(high=result['candles'][0]['high']),inline=False)
-            stonkInfoEmbed.add_field(name='Today\'s Low:',value='{low:.3f}'.format(low=result['candles'][0]['low']),inline=False)
-            #sends the message to discord
-            await sentMessage.edit(embed=stonkInfoEmbed)
-        except api.APIError:
-            await message.channel.send('ERROR: NSS (NO SUCH STOCK)')
-        
-    elif message.content.startswith('$sar'):
-        await message.channel.send('Sarukei Is Not Cool')   
+
 
 async def cleanup():
     print ('committing seppuku')
-    await message.channel.send('I am dead now, goodbye')
-    Client.logout()
-    quit()
+    await bot.logout()
 
 atexit.register(cleanup)
 
 
-client.run(TOKEN)
+bot.run(TOKEN)
